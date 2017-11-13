@@ -1,0 +1,12 @@
+# EditorConfig file
+root = true
+
+[*]
+
+# Indentation
+indent_size = 2
+indent_style = space
+
+# Lines
+end_of_line = lf
+insert_final_newline = true
