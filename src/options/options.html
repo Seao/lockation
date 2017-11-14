@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Lockation options</title>
+    <!-- Meta -->
+  	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <!-- Javascript -->
+    <script src="/js/jquery/jquery.min.js"></script>
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/spectre.min.css">
+    <link rel="stylesheet" href="options.css">
+  </head>
+  <body>
+    <!-- Logo -->
+    <div class="logo-wrapper">
+      <span class="logo">
+        <a href="#">
+          <img src="../../icons/icon48.png">
+        </a>
+      </span>
+      <span class="evaluation">
+        <button class="btn btn-success">Vous aimez Lockaction ? Mettez une étoile !</button>
+      </span>
+    </div>
+    <!-- Menu -->
+    <header class="navbar menu">
+      <div class="container">
+        <div class="columns">
+          <div class="column col-1 col-md-0"></div>
+          <div class="column col-10 col-md-12">
+            <a href="#parameters-global" class="btn btn-link">
+              <span class="text-light">
+                Paramètres généraux
+              </span>
+            </a>
+          </div>
+          <div class="column col-1 col-md-0"></div>
+        </div>
+      </div>
+    </header>
+    <!-- Container -->
+    <div class="container">
+      <div class="columns">
+        <div class="column col-1 col-md-0"></div>
+        <div class="column col-10 col-md-12">
+          <h3 id="parameters-global">Paramètres généraux</h3>
+          <table class="table table-striped table-hover table-options">
+            <tbody>
+              <tr class="active">
+                <td>Activer l'extension</td>
+                <td>
+                  <label class="form-switch">
+                    <input type="checkbox" id="option-extension-activated">
+                    <i class="form-icon"></i>
+                  </label>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="column col-1 col-md-0"></div>
+      </div>
+    </div>
+    <!-- Ending scripts -->
+    <script src="options.js"></script>
+  </body>
+</html>

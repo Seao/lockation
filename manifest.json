@@ -16,7 +16,7 @@
     ],
     "persistent": true
   },
-  "options_page": "src/options/index.html",
+  "options_page": "src/options/options.html",
   "permissions": [
     "geolocation",
     "https://*/*"

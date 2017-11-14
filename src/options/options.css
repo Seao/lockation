@@ -1,0 +1,33 @@
+.logo-wrapper {
+  position: relative;
+  height: 100px;
+  width: 100%;
+}
+
+.logo-wrapper span {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.logo-wrapper .logo {
+  left: 5%;
+}
+
+.logo-wrapper .evaluation {
+  right: 5%;
+}
+
+.menu {
+  background-color: #3a3a3a;
+  margin-bottom: 30px;
+}
+
+td:last-child {
+  padding-right: 20px;
+  text-align: right;
+}
+
+.form-switch {
+  padding: .4rem 1.2rem;
+}
