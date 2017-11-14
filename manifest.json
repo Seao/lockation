@@ -18,6 +18,18 @@
   },
   "options_page": "src/options/index.html",
   "permissions": [
-    "geolocation"
+    "geolocation",
+    "https://*/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "src/inject/inject.js"
+      ]
+    }
   ]
 }
