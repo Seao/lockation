@@ -19,6 +19,7 @@
   "options_page": "src/options/options.html",
   "permissions": [
     "geolocation",
+    "storage",
     "https://*/*"
   ],
   "content_scripts": [
