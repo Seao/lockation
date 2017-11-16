@@ -1,3 +1,5 @@
+/* Header wrapper */
+
 .logo-wrapper {
   position: relative;
   height: 100px;
@@ -23,6 +25,8 @@
   margin-bottom: 30px;
 }
 
+/* Form */
+
 td:last-child {
   padding-right: 20px;
   text-align: right;
@@ -30,4 +34,26 @@ td:last-child {
 
 .form-switch {
   padding: .4rem 1.2rem;
+}
+
+/* Distance slider */
+
+.distance .step-item {
+  cursor:pointer
+}
+
+.step .step-item a {
+  font-size: 13px;
+  font-weight: 100;
+}
+
+a:focus {
+  box-shadow: none;
+}
+
+/* Map */
+
+#map {
+  height: 300px;
+  background-color: #e7e9ed;
 }
