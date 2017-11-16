@@ -23,11 +23,16 @@ function overrideGeolocation() {
 // Verify extension activation
 getSettings('activated', (value) => {
   if(value == true) {
-    var inject = "(function(){ " + overrideGeolocation + " overrideGeolocation();})()";
-    var script = document.createElement('script');
-    script.setAttribute('id', 'lockation');
-    script.appendChild(document.createTextNode(inject));
-    document.documentElement.appendChild(script);
+    // Get current position before obfuscation
+    chrome.runtime.sendMessage({req:'geolocation'}, function(response) {
+      console.log(response.position);
+      // Script injection
+      var inject = "(function(){ " + overrideGeolocation + " overrideGeolocation();})()";
+      var script = document.createElement('script');
+      script.setAttribute('id', 'lockation');
+      script.appendChild(document.createTextNode(inject));
+      document.documentElement.appendChild(script);
+    });
   }
 });
 

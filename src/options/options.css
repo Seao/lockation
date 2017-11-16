@@ -54,6 +54,17 @@ a:focus {
 /* Map */
 
 #map {
-  height: 300px;
+  height: 400px;
   background-color: #e7e9ed;
+}
+
+#map-text {
+  margin-top: 10px;
+}
+
+.wrapper {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
 }
