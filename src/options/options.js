@@ -31,6 +31,7 @@ chrome.storage.sync.get(['settings'], (stored) => {
   chrome.runtime.sendMessage({req:'geolocation'}, function(response) {
     // Hide loading spinner
     $('#loading').hide();
+    $('#map-text').html('');
     // Check response validity
     if(Object.keys(response.position) != 0) {
       map = L.map('map').setView([response.position.latitude, response.position.longitude], 13);
