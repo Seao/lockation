@@ -1,6 +1,44 @@
 {
   "extName": {
-    "message":"Lockation",
-    "description":"Extension name"
+    "message": "Lockation"
+  },
+  "extDescription": {
+    "message": "Keep private your location through obfuscation"
+  },
+  "extEvaluationLabel": {
+    "message": "Do you like Lockation ? Add a star !"
+  },
+  "optionParameters": {
+    "message": "General parameters"
+  },
+  "optionActivation": {
+    "message": "Extension activation"
+  },
+  "optionDistance": {
+    "message": "Size of the noised area"
+  },
+  "optionDistanceStepOne": {
+    "message": "street"
+  },
+  "optionDistanceStepTwo": {
+    "message": "district"
+  },
+  "optionDistanceStepThree": {
+    "message": "borough"
+  },
+  "optionDistanceStepFour": {
+    "message": "city"
+  },
+  "optionMapLoading": {
+    "message": "Loading the map ..."
+  },
+  "optionMapPosition": {
+    "message": "Your position"
+  },
+  "optionMapArea": {
+    "message": "Added noised area"
+  },
+  "optionMapError": {
+    "message": "Impossible to load the map"
   }
 }

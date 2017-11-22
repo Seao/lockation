@@ -1,0 +1,44 @@
+{
+  "extName": {
+    "message": "Lockation"
+  },
+  "extDescription": {
+    "message": "Garde votre localisation privée grâce à de l'obfuscation"
+  },
+  "extEvaluationLabel": {
+    "message": "Vous aimez Lockaction ? Mettez une étoile !"
+  },
+  "optionParameters": {
+    "message": "Paramètres généraux"
+  },
+  "optionActivation": {
+    "message": "Activer l'extension"
+  },
+  "optionDistance": {
+    "message": "Taille de la zone aléatoire"
+  },
+  "optionDistanceStepOne": {
+    "message": "lotissement"
+  },
+  "optionDistanceStepTwo": {
+    "message": "quartier"
+  },
+  "optionDistanceStepThree": {
+    "message": "arrondissement"
+  },
+  "optionDistanceStepFour": {
+    "message": "ville"
+  },
+  "optionMapLoading": {
+    "message": "Chargement de la carte ..."
+  },
+  "optionMapPosition": {
+    "message": "Votre position"
+  },
+  "optionMapArea": {
+    "message": "Zone de bruit ajoutée"
+  },
+  "optionMapError": {
+    "message": "Impossible de charger la carte"
+  }
+}

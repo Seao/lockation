@@ -1,3 +1,10 @@
+// Translation
+var classes = document.getElementsByClassName('i18n');
+for(let i=0; i<classes.length; ++i) {
+  classes[i].innerHTML = chrome.i18n.getMessage(classes[i].dataset.translate);
+}
+
+// Settings
 var map = undefined;
 var circle = undefined;
 
@@ -33,15 +40,15 @@ chrome.storage.sync.get(['settings'], (stored) => {
     		id: 'mapbox.streets'
     	}).addTo(map);
       // Position marker
-      L.marker([response.position.latitude, response.position.longitude]).addTo(map).bindPopup('Votre position').openPopup();
+      L.marker([response.position.latitude, response.position.longitude]).addTo(map).bindPopup(chrome.i18n.getMessage('optionMapPosition')).openPopup();
       // Area noise
       circle = L.circle([response.position.latitude, response.position.longitude], settings.distance, {
     		color: 'red',
     		fillColor: '#f03',
     		fillOpacity: 0.5
-    	}).addTo(map).bindPopup('Zone de bruit ajoutée');
+    	}).addTo(map).bindPopup(chrome.i18n.getMessage('optionMapArea'));
     } else {
-      $('#map-text').html('Impossible de charger la carte');
+      $('#map-text').html(chrome.i18n.getMessage('optionMapError'));
     }
   });
 });
