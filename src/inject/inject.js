@@ -49,7 +49,17 @@ getSettings('activated', (value) => {
       if(event.source != window) return;
       if(event.data.req && (event.data.req == 'noised')) {
         chrome.runtime.sendMessage({req:'geolocation'}, function(response) {
-          window.postMessage({res:response.position}, '*');
+          // Retrieve settings to add noise
+          chrome.storage.sync.get(['settings'], (stored) => {
+            // cf. https://stackoverflow.com/questions/7477003/calculating-new-longitude-latitude-from-old-n-meters#comment74868464_40471701
+            let distance = Math.random() * (stored.settings.distance - 50) + 50;
+            let coef = distance * 0.000008983;
+            let noised = {
+              latitude: response.position.latitude + coef * Math.cos(Math.random() * Math.PI * 2),
+              longitude: response.position.longitude + coef * Math.sin(Math.random() * Math.PI * 2)
+            }
+            window.postMessage({res:noised}, '*');
+          });
         });
       }
     });
