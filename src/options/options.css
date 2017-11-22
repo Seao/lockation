@@ -16,6 +16,10 @@
   left: 5%;
 }
 
+.logo-wrapper .logo img {
+  height: 75px;
+}
+
 .logo-wrapper .evaluation {
   right: 5%;
 }
