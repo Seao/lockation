@@ -4,16 +4,31 @@ function overrideGeolocation(extension) {
 
   // Current position
   navigator.geolocation.getCurrentPosition = (success, error, options) => {
-    console.log("called 1");
+    console.warn('Lockation : geolocation.getCurrentPosition overwrited function has been called');
+    requestNoisedPosition((position) => {
+      success(position);
+    });
   };
 
+  // Watch position
   navigator.geolocation.watchPosition = (success, error, options) => {
-  	// Request content script for noised position
+    console.warn('Lockation : geolocation.watchPosition overwrited function has been called');
+    requestNoisedPosition((position) => {
+      success(position);
+    });
+  };
+
+  // Clear watch position trigger
+  navigator.geolocation.clearWatch = () => {
+  	console.warn('Lockation : geolocation.clearWatch overwrited function has been called');
+  };
+
+  requestNoisedPosition = (callback) => {
     window.postMessage({req:'noised'}, '*');
     window.addEventListener('message', (event) => {
       if(event.source != window) return;
       if(event.data.res) {
-        success({
+        callback({
           coords:{
             latitude: parseFloat(event.data.res.latitude),
             longitude: parseFloat(event.data.res.longitude),
@@ -21,13 +36,9 @@ function overrideGeolocation(extension) {
             accuracy: 10,
             speed: 0
           }
-        })
+        });
       }
     });
-  };
-
-  navigator.geolocation.clearWatch = () => {
-  	console.log("called 3");
   };
 
   // Clean script injection
