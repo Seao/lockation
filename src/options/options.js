@@ -35,7 +35,7 @@ chrome.storage.sync.get(['settings'], (stored) => {
     // Check response validity
     if(Object.keys(response.position) != 0) {
       map = L.map('map').setView([response.position.latitude, response.position.longitude], 13);
-      L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+      L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic2VhbyIsImEiOiJjaXQ4eDJjMjgwMDF5MzBtZjVhMDExamU1In0.g-moen1abTPMGuYgCbGHMQ', {
     		maxZoom: 18,
     		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
     		id: 'mapbox.streets'
