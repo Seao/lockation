@@ -46,6 +46,12 @@ function overrideGeolocation(extension) {
 	if(script) script.remove();
 }
 
+// Default settings
+var settings = {
+  'activated': true,
+  'distance': 1000
+}
+
 // Verify extension activation
 getSettings('activated', (value) => {
   if(value == true) {
@@ -62,8 +68,12 @@ getSettings('activated', (value) => {
         chrome.runtime.sendMessage({req:'geolocation'}, function(response) {
           // Retrieve settings to add noise
           chrome.storage.sync.get(['settings'], (stored) => {
+            // Check if there is already stored settings
+            if(Object.keys(stored).length != 0) {
+              settings = stored.settings;
+            }
             // cf. https://stackoverflow.com/questions/7477003/calculating-new-longitude-latitude-from-old-n-meters#comment74868464_40471701
-            let distance = Math.random() * (stored.settings.distance - 50) + 50;
+            let distance = Math.random() * (settings.distance - 50) + 50;
             let coef = distance * 0.000008983;
             let noised = {
               latitude: response.position.latitude + coef * Math.cos(Math.random() * Math.PI * 2),
@@ -79,9 +89,6 @@ getSettings('activated', (value) => {
 
 // Functions
 function getSettings(property, callback) {
-  var settings = {
-    "activated": true
-  }
   chrome.storage.sync.get(['settings'], (stored) => {
     if(Object.keys(stored).length != 0) {
       settings = stored.settings;
