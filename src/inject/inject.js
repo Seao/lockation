@@ -24,9 +24,11 @@ function overrideGeolocation(extension) {
   };
 
   requestNoisedPosition = (callback) => {
-    window.postMessage({req:'noised'}, '*');
+    let uid = Math.random().toString(36).substring(2)+(new Date()).getTime().toString(36);
+    window.postMessage({req:'noised',uid:uid}, '*');
     window.addEventListener('message', (event) => {
       if(event.source != window) return;
+      if(event.data.uid != uid) return;
       if(event.data.res) {
         callback({
           coords:{
@@ -64,8 +66,8 @@ getSettings('activated', (value) => {
     // Event listener for bidirectionnal communication with injected script
     window.addEventListener('message', (event) => {
       if(event.source != window) return;
-      if(event.data.req && (event.data.req == 'noised')) {
-        chrome.runtime.sendMessage({req:'geolocation'}, function(response) {
+      if(event.data.req && (event.data.req == 'noised') && event.data.uid) {
+        chrome.runtime.sendMessage({req:'geolocation'}, (response) => {
           // Retrieve settings to add noise
           chrome.storage.sync.get(['settings'], (stored) => {
             // Check if there is already stored settings
@@ -79,7 +81,7 @@ getSettings('activated', (value) => {
               latitude: response.position.latitude + coef * Math.cos(Math.random() * Math.PI * 2),
               longitude: response.position.longitude + coef * Math.sin(Math.random() * Math.PI * 2)
             }
-            window.postMessage({res:noised}, '*');
+            window.postMessage({res:noised,uid:event.data.uid}, '*');
           });
         });
       }
