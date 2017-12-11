@@ -7,17 +7,15 @@ for(let i=0; i<classes.length; ++i) {
 // Settings
 var map = undefined;
 var circle = undefined;
+var settings = undefined;
 
-var settings = {
-  'activated': true,
-  'distance': 1000
-}
-
-chrome.storage.sync.get(['settings'], (stored) => {
-  // Check if there is already stored settings
-  if(Object.keys(stored).length != 0) {
-    settings = stored.settings;
+chrome.runtime.sendMessage({
+  req: 'get',
+  params: {
+    target: 'settings',
   }
+}, (stored) => {
+  settings = stored;
   // Load settings
   if(settings.activated) {
     $('#option-extension-activated').prop('checked',true);
@@ -80,13 +78,18 @@ function setDistanceSlider(property, distance) {
   }
 }
 
-// Storage
-function storeSettings() {
-  console.log(settings)
-  chrome.storage.sync.set({
-    'settings': settings
-  }, () => {
-    console.log('Settings updated');
-    console.log(settings);
-  });
+function storeSettings() {
+  if(settings != undefined) {
+    chrome.runtime.sendMessage({
+      req: 'set',
+      params: {
+        target: 'settings',
+        value: settings
+      }
+    }, (response) => {
+      if(response == true) {
+        console.log(settings);
+      }
+    });  
+  }
 }

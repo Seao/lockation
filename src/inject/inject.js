@@ -48,52 +48,36 @@ function overrideGeolocation(extension) {
 	if(script) script.remove();
 }
 
-// Default settings
-var settings = {
-  'activated': true,
-  'distance': 1000
-}
-
-// Verify extension activation
-getSettings('activated', (value) => {
-  if(value == true) {
-    // Script injection
-    var inject = '(function(){ ' + overrideGeolocation + ' overrideGeolocation("' + chrome.runtime.id + '");})()';
-    var script = document.createElement('script');
-    script.setAttribute('id', 'lockation');
-    script.appendChild(document.createTextNode(inject));
-    document.documentElement.appendChild(script);
-    // Event listener for bidirectionnal communication with injected script
-    window.addEventListener('message', (event) => {
-      if(event.source != window) return;
-      if(event.data.req && (event.data.req == 'noised') && event.data.uid) {
-        chrome.runtime.sendMessage({req:'geolocation'}, (response) => {
-          // Retrieve settings to add noise
-          chrome.storage.sync.get(['settings'], (stored) => {
-            // Check if there is already stored settings
-            if(Object.keys(stored).length != 0) {
-              settings = stored.settings;
-            }
-            let radius = Math.random() * (settings.distance - 50) + 50;
-            let angle = Math.random() * (360 - 0) + 0;
-            let noised = computeDestinationCoordinate(response.position.latitude, response.position.longitude, angle, radius);
-            window.postMessage({res:noised,uid:event.data.uid}, '*');
-          });
-        });
-      }
+// Script injection
+var inject = '(function(){ ' + overrideGeolocation + ' overrideGeolocation("' + chrome.runtime.id + '");})()';
+var script = document.createElement('script');
+script.setAttribute('id', 'lockation');
+script.appendChild(document.createTextNode(inject));
+document.documentElement.appendChild(script);
+// Event listener for bidirectionnal communication with injected script
+window.addEventListener('message', (event) => {
+  if(event.source != window) return;
+  if(event.data.req && (event.data.req == 'noised') && event.data.uid) {
+    chrome.runtime.sendMessage({req:'geolocation'}, (response) => {
+      // Retrieve settings to add noise
+      chrome.runtime.sendMessage({
+        req: 'get',
+        params: {
+          target: 'settings',
+        }
+      }, (settings) => {
+        if(settings.activated == true) {
+          let radius = Math.random() * (settings.distance - 50) + 50;
+          let angle = Math.random() * (360 - 0) + 0;
+          let noised = computeDestinationCoordinate(response.position.latitude, response.position.longitude, angle, radius);
+          window.postMessage({res:noised,uid:event.data.uid}, '*');
+        } else {
+          window.postMessage({res:response.position,uid:event.data.uid}, '*');
+        }
+      });
     });
   }
 });
-
-// Functions
-function getSettings(property, callback) {
-  chrome.storage.sync.get(['settings'], (stored) => {
-    if(Object.keys(stored).length != 0) {
-      settings = stored.settings;
-    }
-    callback(settings[property]);
-  });
-}
 
 /*
 * Original following scripts by Chris Veness
