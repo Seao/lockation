@@ -29,7 +29,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         // Default settings
         var settings = {
           'activated': true,
-          'distance': 1000
+          'distance': 1000,
+          'cache': 30
         }
         // Overwrite if necessaray
         if(Object.keys(stored).length != 0) {

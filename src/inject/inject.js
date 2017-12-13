@@ -54,6 +54,8 @@ var script = document.createElement('script');
 script.setAttribute('id', 'lockation');
 script.appendChild(document.createTextNode(inject));
 document.documentElement.appendChild(script);
+// Caching
+var cached;
 // Event listener for bidirectionnal communication with injected script
 window.addEventListener('message', (event) => {
   if(event.source != window) return;
@@ -67,10 +69,23 @@ window.addEventListener('message', (event) => {
         }
       }, (settings) => {
         if(settings.activated == true) {
-          let radius = Math.random() * (settings.distance - 50) + 50;
-          let angle = Math.random() * (360 - 0) + 0;
-          let noised = computeDestinationCoordinate(response.position.latitude, response.position.longitude, angle, radius);
-          window.postMessage({res:noised,uid:event.data.uid}, '*');
+          // Verify cached position
+          if(settings.cache && cached && new Date(cached.timestamp + (settings.cache * 60000)) > new Date) {
+            window.postMessage({res:cached.position,uid:event.data.uid}, '*');
+          } else {
+            // Compute new noised position
+            let radius = Math.random() * (settings.distance - 50) + 50;
+            let angle = Math.random() * (360 - 0) + 0;
+            let noised = computeDestinationCoordinate(response.position.latitude, response.position.longitude, angle, radius);
+            // Update cached Position
+            if(settings.cache > 0) {
+              cached = {
+                position: noised,
+                timestamp: new Date().valueOf()
+              }
+            }
+            window.postMessage({res:noised,uid:event.data.uid}, '*');
+          }
         } else {
           window.postMessage({res:response.position,uid:event.data.uid}, '*');
         }

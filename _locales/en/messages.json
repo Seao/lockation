@@ -40,5 +40,8 @@
   },
   "optionMapError": {
     "message": "Impossible to load the map"
+  },
+  "optionCache": {
+    "message": "Caching time (minute)"
   }
 }

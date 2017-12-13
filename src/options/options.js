@@ -25,6 +25,10 @@ chrome.runtime.sendMessage({
     setDistanceSlider('distance', settings.distance);
   } triggerSliderChanges('distance', $('.step-item a'));
 
+  if(settings.cache) {
+    $('#option-cache').val(settings.cache);
+  } triggerInputNumberChanges('cache', $('#option-cache'));
+
   // Geolocation
   chrome.runtime.sendMessage({req:'geolocation'}, function(response) {
     // Hide loading spinner
@@ -68,6 +72,18 @@ function triggerSliderChanges(property, element) {
   });
 }
 
+function triggerInputNumberChanges(property, element) {
+  element.change(() => {
+    if(Number.isInteger(parseInt(element.val()))) {
+      element.removeClass('is-error').addClass('is-success');
+      settings[property] = parseInt(element.val());
+      storeSettings();
+    } else {
+      element.removeClass('is-success').addClass('is-error');
+    }
+  });
+}
+
 // Utils
 function setDistanceSlider(property, distance) {
   $('.step-item').removeClass('active');
@@ -90,6 +106,6 @@ function storeSettings() {
       if(response == true) {
         console.log(settings);
       }
-    });  
+    });
   }
 }
