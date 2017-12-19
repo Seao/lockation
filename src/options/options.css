@@ -55,6 +55,13 @@ a:focus {
   box-shadow: none;
 }
 
+/* Cache input */
+
+#option-cache {
+  float: right;
+  width: auto;
+}
+
 /* Map */
 
 #map {

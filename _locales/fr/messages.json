@@ -40,5 +40,8 @@
   },
   "optionMapError": {
     "message": "Impossible de charger la carte"
+  },
+  "optionCache": {
+    "message": "Temps de cache (minute)"
   }
 }

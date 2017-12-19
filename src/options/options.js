@@ -7,17 +7,15 @@ for(let i=0; i<classes.length; ++i) {
 // Settings
 var map = undefined;
 var circle = undefined;
+var settings = undefined;
 
-var settings = {
-  'activated': true,
-  'distance': 1000
-}
-
-chrome.storage.sync.get(['settings'], (stored) => {
-  // Check if there is already stored settings
-  if(Object.keys(stored).length != 0) {
-    settings = stored.settings;
+chrome.runtime.sendMessage({
+  req: 'get',
+  params: {
+    target: 'settings',
   }
+}, (stored) => {
+  settings = stored;
   // Load settings
   if(settings.activated) {
     $('#option-extension-activated').prop('checked',true);
@@ -26,6 +24,10 @@ chrome.storage.sync.get(['settings'], (stored) => {
   if(settings.distance) {
     setDistanceSlider('distance', settings.distance);
   } triggerSliderChanges('distance', $('.step-item a'));
+
+  if(settings.cache) {
+    $('#option-cache').val(settings.cache);
+  } triggerInputNumberChanges('cache', $('#option-cache'));
 
   // Geolocation
   chrome.runtime.sendMessage({req:'geolocation'}, function(response) {
@@ -70,6 +72,18 @@ function triggerSliderChanges(property, element) {
   });
 }
 
+function triggerInputNumberChanges(property, element) {
+  element.change(() => {
+    if(Number.isInteger(parseInt(element.val()))) {
+      element.removeClass('is-error').addClass('is-success');
+      settings[property] = parseInt(element.val());
+      storeSettings();
+    } else {
+      element.removeClass('is-success').addClass('is-error');
+    }
+  });
+}
+
 // Utils
 function setDistanceSlider(property, distance) {
   $('.step-item').removeClass('active');
@@ -80,13 +94,18 @@ function setDistanceSlider(property, distance) {
   }
 }
 
-// Storage
-function storeSettings() {
-  console.log(settings)
-  chrome.storage.sync.set({
-    'settings': settings
-  }, () => {
-    console.log('Settings updated');
-    console.log(settings);
-  });
+function storeSettings() {
+  if(settings != undefined) {
+    chrome.runtime.sendMessage({
+      req: 'set',
+      params: {
+        target: 'settings',
+        value: settings
+      }
+    }, (response) => {
+      if(response == true) {
+        console.log(settings);
+      }
+    });
+  }
 }
