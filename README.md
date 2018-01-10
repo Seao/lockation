@@ -20,6 +20,8 @@ Websites can request an access to your location through browser defined methods.
 |Brute force|Generate too many fake locations which would be centered around the real one. Could be blocked through the cache feature.|✓|0.0.2|
 |Knowledge background|External data can be used by malicious websites to guess the real location within the protection area.|✗||
 
+**Test by yourself :** [demo/bruteforce.html](https://seao.github.io/lockation/demo/bruteforce.html) is a demonstration tool allowing you to test a brute-force attack on the `navigator.geolocation.getCurrentPosition()`, used to compute your position, and verify the effectiveness of the cache protection offered by Lockation since the version 0.0.2
+
 ## Permissions
 
 - `geolocation` : Get the real position and add noise over it
