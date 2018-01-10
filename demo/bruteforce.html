@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  	<meta charset=utf-8 />
+  	<title>Lockation - Bruteforce example</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <style>
+      #map {
+        height: 500px;
+        width: 100%;
+      }
+      .form {
+        margin: 15px;
+      }
+    </style>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  	<!--[if IE]>
+  		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  	<![endif]-->
+
+    <script>
+
+      var map = undefined;
+
+      function computePosition() {
+        return new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(
+            (pos) => {
+              resolve(pos);
+            },
+            (err) => {
+              reject(err);
+            },
+            {
+              enableHighAccuracy: true,
+              timeout: 5000,
+              maximumAge: 0
+            }
+          );
+        });
+      }
+
+      function initMap() {
+        var center = {
+          lat: 45.7828892,
+          lng: 4.8858826
+        };
+        // Map creation
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 14,
+          center: center
+        });
+      }
+
+      function distanceBetweenCoordinates(lat1,lon1,lat2,lon2) {
+        var R = 6371;
+        var dLat = deg2rad(lat2-lat1);
+        var dLon = deg2rad(lon2-lon1);
+        var a =
+          Math.sin(dLat/2) * Math.sin(dLat/2) +
+          Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+          Math.sin(dLon/2) * Math.sin(dLon/2)
+          ;
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        var d = R * c;
+        return d;
+      }
+
+      function deg2rad(deg) {
+        return deg * (Math.PI/180)
+      }
+
+      window.onload = function() {
+        $('#attack').on('click', function() {
+          // Variables
+          var latitude = $('#inputLatitude').val();
+          var longitude = $('#inputLongitude').val();
+          var points = $('#inputPoints').val();
+          var delay = $('#inputDelay').val();
+          // Markers
+          var average = new google.maps.Marker({
+            position: {
+              lat: parseFloat(latitude),
+              lng: parseFloat(longitude)
+            },
+            map: map,
+            icon: 'https://chart.googleapis.com/chart?chst=d_map_spin&chld=1.5|0|3CB371|10|b|average'
+          });
+          var real = new google.maps.Marker({
+            position: {
+              lat: parseFloat(latitude),
+              lng: parseFloat(longitude)
+            },
+            map: map,
+            icon: 'https://chart.googleapis.com/chart?chst=d_map_spin&chld=1.5|0|FFF|10|b|location'
+          });
+          // Average Computation
+          var positions = [];
+          positions.push = function(item) {
+            Array.prototype.push.call(this, item);
+            this.onPush();
+          };
+          positions.onPush = function() {
+            let averagePosition = {
+              lat: 0,
+              lng: 0
+            }
+            for(let pos of this) {
+              averagePosition.lat += (pos.lat / this.length);
+              averagePosition.lng += (pos.lng / this.length);
+            }
+            average.setPosition(averagePosition);
+            console.log(distanceBetweenCoordinates(averagePosition.lat, averagePosition.lng, real.getPosition().lat(), real.getPosition().lng()) * 1000);
+          };
+          // Computation
+          for(let i=0; i<points; ++i) {
+            // Add delay
+            setTimeout(() => {
+              computePosition().then(
+                (position) => {
+                  let pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                  };
+                  positions.push(pos);
+                  new google.maps.Marker({
+                    position: pos,
+                    map: map
+                  });
+                },
+                (err) => {
+                  console.error(JSON.stringify(err));
+                }
+              );
+            }, i * delay);
+          }
+        });
+      }
+
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAdilH1z8yPpsv4BDKQOK1s6jp7lVr16HU&callback=initMap"></script>
+  </head>
+  <body>
+    <div class="jumbotron text-center">
+      <h1>Bruteforce<h1>
+      <p>Demonstration of a bruteforce attack</p>
+    </div>
+    <div class="container">
+      <h3>Explanations</h3>
+      <ul>
+        <li>Latitude : Your real latitude</li>
+        <li>Longitude : Your real longitude</li>
+        <li>Computation : Number of noised position computed</li>
+        <li>Delay : Duration between each computation in milliseconds</li>
+      </ul>
+      <div class="row">
+        <div class="form form-inline">
+          <div class="form-group mx-sm-3">
+            <input type="text" class="form-control" id="inputLatitude" placeholder="Latitude">
+          </div>
+          <div class="form-group mx-sm-3">
+            <input type="text" class="form-control" id="inputLongitude" placeholder="Longitude">
+          </div>
+          <div class="form-group mx-sm-3">
+            <input type="text" class="form-control" id="inputPoints" placeholder="Computations">
+          </div>
+          <div class="form-group mx-sm-3">
+            <input type="text" class="form-control" id="inputDelay" placeholder="Delay">
+          </div>
+          <button type="submit" id="attack" class="btn btn-primary">Start</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div id="map"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
